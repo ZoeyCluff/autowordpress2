@@ -1,0 +1,10 @@
+.DS_Store
+secrets.py
+secrets.pyc
+secrets.old
+nginx.py
+wp-config.php
+.stfolder
+.stversions
+Autopress-requests.py
+__pycache__
