@@ -1,34 +1,19 @@
 #!/usr/bin/python
 from __future__ import print_function
-from tempfile import mkstemp
-
-# import passwords and API keys to make it easier to link people to this without giving away users/passwords.
-
+import os, sys, traceback, fileinput, string, zipfile, urllib, shutil, tarfile, pwd, grp, socket, time, requests, json, MySQLdb, pathlib
+from twindb_cloudflare.twindb_cloudflare import CloudFlare, CloudFlareException
 from distutils.dir_util import copy_tree
 from random import randint, choice
-import os
-import sys
-import traceback
-import fileinput
-import string
-import zipfile
-import urllib
-import secrets
-import shutil
-import tarfile
-import pwd
-import grp
-import socket
-import time
-import requests
-import json
-from twindb_cloudflare.twindb_cloudflare import CloudFlare, CloudFlareException
-import MySQLdb
-import pathlib
+
+from tempfile import mkstemp
 from six.moves import input
 execfile("./modules/checks.py")
+execfile("./modules/database.py")
+# import passwords and API keys to make it easier to link people to this without giving away users/passwords.
 execfile("./secrets.py")
 from secrets import *
+
+# run pre-req checks to make sure all files are in the proper location.
 checks()
 
 
@@ -46,15 +31,4 @@ def main(testing = False):
 
 
 
-    db = MySQLdb.connect(''+mysqlServer, ''+mysqlUser, ''+mysqlRootPassword)
-
-    # Create a Cursor object to execute queries.
-    cur = db.cursor()
-
-    # Select data from table using SQL query.
-    cur.execute("CREATE DATABASE IF NOT EXISTS " + domainShort)
-
-    cur.execute("GRANT ALL PRIVILEGES ON " +domainShort + ".* TO %s@%s IDENTIFIED BY %s ", (domainShort, ipv4, mysqlpassword))
-    cur.execute("FLUSH PRIVILEGES")
-    db.commit()
-    db.close()
+    createDB(mysqlUser, mysqlRootPassword, domainShort, ipv4, mysqlpassword)

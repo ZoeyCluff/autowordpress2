@@ -1,7 +1,6 @@
 #!/usr/bin/python
-import os
-import shutil
-import sys
+import os, shutil, sys
+
 execfile("./modules/cron/addcron.py")
 
 def checks():
@@ -18,8 +17,9 @@ def checks():
 
     if not os.path.exists("/etc/lerenewal.py"):
         print("LetsEncrypt renewal Cronjob missing")
-       #  shutil.move("./modules/cron/lecrontab.py", "/etc/lecrontab.py")
+
         addcron()
+    print("LetsEncrypt crontab looks right")
 
 
     # Make sure nginxconfig.conf exists
